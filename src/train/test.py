@@ -17,7 +17,7 @@ def parseArguments():
     parser.add_argument('--type_sp', type=str, default='SEAN')
     parser.add_argument('--use_argmax', type=bool, default=True) 
     parser.add_argument('--use_sean', type=bool, default=True) 
-    parser.add_argument('--inference', type=bool, default=True) 
+    parser.add_argument('--inference', action='store_true', default=False) 
     parser.add_argument('--num_classes', type=int, default=3)
     parser.add_argument('--height', type=int, default=256)#256
     parser.add_argument('--width', type=int, default=512)#512
