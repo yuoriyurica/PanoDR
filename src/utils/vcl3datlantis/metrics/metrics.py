@@ -6,8 +6,8 @@ import imageio
 from scipy import linalg
 from torch.nn.functional import adaptive_avg_pool2d
 from vcl3datlantis.metrics.inception import InceptionV3
-from skimage.measure import compare_ssim
-from skimage.measure import compare_psnr
+from skimage.metrics import structural_similarity as compare_ssim
+from skimage.metrics import peak_signal_noise_ratio as compare_psnr
 import glob
 import argparse
 from lpips_pytorch import LPIPS, lpips
