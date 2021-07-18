@@ -90,7 +90,7 @@ import glob
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
 def split(path):
-    paths = glob.glob(f"{path}\\*\\*\\*\\*")
+    paths = glob.glob(f"{path}/*/*/*/*")
     train = []
     validation = []
     test = []

@@ -91,7 +91,7 @@ import parser
 import glob
 
 def split(path):
-    paths = glob.glob(f"{path}\\*\\*\\*\\*")
+    paths = glob.glob(f"{path}/*/*/*/*")
     train = []
     validation = []
     test = []
