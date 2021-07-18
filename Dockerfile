@@ -13,6 +13,5 @@ RUN mkdir structure_semantics/validation
 RUN mkdir structure_semantics/test
 
 COPY PanoDR PanoDR
-RUN ls
 RUN pip install -e PanoDR/src/utils
 RUN pip install git+https://github.com/S-aiueo32/lpips-pytorch.git
