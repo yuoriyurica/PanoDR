@@ -97,7 +97,8 @@ def split(path):
     test = []
     for path in paths:
         i = path.find('scene_')
-        if i > 0:
+        j = path.find('panorama')
+        if i > 0 and j > 0:
             scene = int(path[i+6:i+11])
             if scene >= 3250:
                 test.append(path)
