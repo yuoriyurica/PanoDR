@@ -97,13 +97,14 @@ def split(path):
     test = []
     for path in paths:
         i = path.find('scene_')
-        scene = int(path[i+6:i+11])
-        if scene >= 3250:
-            test.append(path)
-        elif scene >= 3000:
-            validation.append(path)
-        else:
-            train.append(path)
+        if i > 0:
+            scene = int(path[i+6:i+11])
+            if scene >= 3250:
+                test.append(path)
+            elif scene >= 3000:
+                validation.append(path)
+            else:
+                train.append(path)
     
     return train, validation, test
         
