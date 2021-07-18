@@ -1,16 +1,10 @@
 FROM nvcr.io/nvidia/pytorch:20.08-py3
 
-WORKDIR /home/chaochen
+WORKDIR /workspace
 
 RUN mkdir Structured3D
-RUN mkdir Structured3D/train
-RUN mkdir Structured3D/validation
-RUN mkdir Structured3D/test
 
 RUN mkdir structure_semantics
-RUN mkdir structure_semantics/train
-RUN mkdir structure_semantics/validation
-RUN mkdir structure_semantics/test
 
 COPY PanoDR PanoDR
 RUN pip install -e PanoDR/src/utils

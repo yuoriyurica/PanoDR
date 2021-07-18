@@ -88,6 +88,25 @@ from vcl3datlantis.dataloaders.Structured_3D_refined import DRS3D
 from torch.utils.data import DataLoader
 from vcl3datlantis.models.tester import *
 import parser
+import glob
+
+def split(path):
+    paths = glob.glob(f"{path}\\*\\*\\*\\*")
+    train = []
+    validation = []
+    test = []
+    for path in paths:
+        i = path.find('scene_')
+        scene = int(path[i+6:i+11])
+        if scene >= 3250:
+            test.append(path)
+        elif scene >= 3000:
+            validation.append(path)
+        else:
+            train.append(path)
+    
+    return train, validation, test
+        
 
 if __name__ == "__main__":
     device = torch.device("cuda:" + str(args.gpu_id) if (torch.cuda.is_available() and int(args.gpu_id) >= 0) else "cpu")  
@@ -95,7 +114,9 @@ if __name__ == "__main__":
     if args.inference:
         test_dataset = None
     else:
-        test_dataset =DataLoader(DRS3D(args.test_path, args.width, args.height, 0.8, 0.01, roll = False,  layout_extras = False), 
+        
+        _, _, test = split(args.test_path)
+        test_dataset =DataLoader(DRS3D(test, args.width, args.height, 0.8, 0.01, roll = False,  layout_extras = False), 
                 args.batch_size, shuffle=False, num_workers=2)
 
     testing(args, device, test_dataset)

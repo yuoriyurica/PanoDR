@@ -87,14 +87,33 @@ from torch.utils.data import DataLoader
 from vcl3datlantis.models.trainer import *
 import parser
 import glob
-os.environ['CUDA_VISIBLE_DEVICES'] = '0,1'
+os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+
+def split(path):
+    paths = glob.glob(f"{path}\\*\\*\\*\\*")
+    train = []
+    validation = []
+    test = []
+    for path in paths:
+        i = path.find('scene_')
+        scene = int(path[i+6:i+11])
+        if scene >= 3250:
+            test.append(path)
+        elif scene >= 3000:
+            validation.append(path)
+        else:
+            train.append(path)
+    
+    return train, validation, test
 
 if __name__ == "__main__":
         device = torch.device("cuda:" + str(args.gpu_id) if (torch.cuda.is_available() and int(args.gpu_id) >= 0) else "cpu")  
 
-        train_dataset = DataLoader(DRS3D(args.train_path,args.width, args.height, 0.8, 0.06, roll = True,  layout_extras = False), 
+        train, _, test = split(args.train_path)
+
+        train_dataset = DataLoader(DRS3D(train,args.width, args.height, 0.8, 0.06, roll = True,  layout_extras = False), 
                 args.batch_size, shuffle=True, num_workers=2)
-        test_dataset =DataLoader(DRS3D(args.test_path, args.width, args.height, 0.8, 0.01, roll = False,  layout_extras = False), 
+        test_dataset =DataLoader(DRS3D(test, args.width, args.height, 0.8, 0.01, roll = False,  layout_extras = False), 
                 args.test_batch_size, shuffle=False, num_workers=2)
 
         training(args, train_dataset, test_dataset, device)
