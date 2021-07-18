@@ -51,12 +51,14 @@ class GatedGenerator(nn.Module):
         self.refine_dec_4 = GatedConv2d(opt.latent_channels, opt.out_channels, 3, 1, 1, pad_type = opt.pad_type, norm='none', activation = 'tanh')
 
 
-    def forward(self, img, inverse_mask, masked_input, device, use_sean):
+    def forward(self, img, inverse_mask, masked_input, device, use_sean, gt_label=None):
         self.sem_layout = torch.zeros((self.opt.batch_size, self.opt.in_layout_channels, self.opt.height, self.opt.width)).float().to(device)
         first_out = masked_input
         structure_model_output = self.structure_model(masked_input).clone() 
 
-        if self.opt.use_argmax:
+        if not gt_label == None:
+            self.sem_layout = gt_label
+        elif self.opt.use_argmax:
             self.soft_sem_layout = torch.softmax(structure_model_output, dim = 1)
             self.soft_sem_layout = torch.argmax(self.soft_sem_layout, dim=1, keepdim=True)
             self.soft_sem_layout = torch.clamp(self.soft_sem_layout, min=0, max=2)
