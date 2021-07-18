@@ -99,7 +99,8 @@ class DRS3D(Dataset):
 
         full_semantic_map = np.array(Image.open(os.path.join(path,"full", "semantic.png")), dtype=np.int32)
 
-        cwf = cv2.imread(os.path.join(path,"empty", "structure_semantics.png"), 0)
+        ss_path = os.path.join(path,"empty", "structure_semantics.png").replace('Structured3D', 'structure_semantics')
+        cwf = cv2.imread(ss_path, 0)
         cwf = remap_segmentation(cwf)
 
         if self._layout_extras:
@@ -164,7 +165,12 @@ class DRS3D(Dataset):
         mask[pos_y : pos_y + height_size, pos_x : pos_x + width_size] = 255
         return mask
 
-
+    def _produce_random_rect_mask(self, mask_width = 256, mask_height = 128) -> np.ndarray:
+        mask = np.zeros((self._height, self._width), dtype = np.uint8)
+        mask_x = random.randint(0, self._width - mask_width)
+        mask_y = random.randint(0, self._height - mask_height)
+        mask[mask_y:mask_y + mask_height, mask_x:mask_x + mask_width] = 255
+        return mask
 
     def _compute_mask(self, semantic_map : np.ndarray, candidate_objects_for_removal : list) -> np.ndarray:
         image_area = semantic_map.size
@@ -248,7 +254,8 @@ class DRS3D(Dataset):
                 if self._dilate_convex_mask:
                     kernel = np.ones((3,3), np.uint8)
                     mask = cv2.dilate(mask, kernel, iterations = 1, borderValue = 255)
-                  
+
+        mask = self._produce_random_rect_mask()    
 
         cwf_t = torch.from_numpy(cwf).float()
         cwf_one_hot = one_hot(cwf_t.unsqueeze(0), 3)
