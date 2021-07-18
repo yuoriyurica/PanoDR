@@ -6,6 +6,7 @@ import imageio
 from scipy import linalg
 from torch.nn.functional import adaptive_avg_pool2d
 from vcl3datlantis.metrics.inception import InceptionV3
+from vcl3datlantis.metrics.fid import FID
 from skimage.metrics import structural_similarity as compare_ssim
 from skimage.metrics import peak_signal_noise_ratio as compare_psnr
 import glob
@@ -130,7 +131,11 @@ class Reconstruction_Metrics():
             "l1 Variance: %.4f" % round(np.var(l1), 4),
             "LPIPS: %.4f" % (torch.mean(torch.tensor(lpips_ar)))
         )    
-        return np.mean(psnr), np.mean(ssim), np.mean(l1), np.mean(mae), (torch.mean(torch.tensor(lpips_ar)))
+
+        fid = FID()
+        fid_score = fid.calculate_from_disk(inputs, gts)
+
+        return np.mean(psnr), np.mean(ssim), np.mean(l1), np.mean(mae), (torch.mean(torch.tensor(lpips_ar))), fid_score
 
 
 def get_image_list(flist):

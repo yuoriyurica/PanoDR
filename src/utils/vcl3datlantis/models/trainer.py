@@ -73,9 +73,10 @@ def training(args, dataloader, test_dataloader, device):
             inPaintModel.initData(data, epoch, iteration)
             inPaintModel.inference(epoch)
         
-        psnr, ssim, mae, lpips = inPaintModel.evaluate(rec, str(epoch))
+        psnr, ssim, mae, lpips, fid = inPaintModel.evaluate(rec, str(epoch))
         
         plot_viz.append_metric(epoch, epoch, torch.tensor(lpips), "LPIPS")
         plot_viz.append_metric(epoch, epoch, torch.tensor(psnr), "PSNR")
         plot_viz.append_metric(epoch, epoch, torch.tensor(ssim), "SSIM")
         plot_viz.append_metric(epoch, epoch, torch.tensor(mae), "MAE")
+        plot_viz.append_metric(epoch, epoch, torch.tensor(fid), "FID")
