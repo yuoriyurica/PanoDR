@@ -33,6 +33,10 @@ class PanoDR(BaseModel):
             for param in self.netG.structure_model.parameters():
                 param.requires_grad = False
 
+        print("Freezing Generator network's weights\n")
+        for param in self.netG.parameters():
+            param.requires_grad = False
+
         norm_layer = get_norm_layer()
 
         self.model_names = ['D', 'G']
@@ -103,7 +107,7 @@ class PanoDR(BaseModel):
         self.inverse_mask = 1 - data["mask"].to(self.device)   #1 in masked area
         self.img_path = data["img_path"]
         self.sem_layout = data["label_semantic"].to(self.device)
-        self.masked_input = self.images * self.mask + self.inverse_mask
+        self.masked_input = self.gt_empty * self.mask + self.inverse_mask
         self.mask_patch_gt = self.gt_empty * self.inverse_mask 
         self.epoch = epoch
         self.iteration = iteration
@@ -136,16 +140,16 @@ class PanoDR(BaseModel):
         self.D_loss.backward(retain_graph=True)
 
     def optimize_parameters(self):
-        _, self.out, self.structure_model_output, self.structure_model_output_soft  = self.netG(self.images, self.inverse_mask, self.masked_input, self.device, self.opt.use_sean)
+        _, self.out, self.structure_model_output, self.structure_model_output_soft  = self.netG(self.images, self.inverse_mask, self.masked_input, self.device, self.opt.use_sean, self.gt_label_one_hot)
         self.mask_patch_pred = self.out * self.inverse_mask
-        self.comp = self.out * self.inverse_mask + (self.images * self.mask)
+        self.comp = self.out * self.inverse_mask + (self.gt_empty * self.mask)
 
         for p in self.netD.parameters():
             p.requires_grad = False
 
         self.optimizer_G.zero_grad()
         self.forward_G()
-        self.backward_G()
+        # self.backward_G()
         self.optimizer_G.step()
 
         for p in self.netD.parameters():
@@ -189,17 +193,17 @@ class PanoDR(BaseModel):
 
     def evaluate(self, rec, epoch):
         metrics_writer = self.opt.results_path+str(self.opt.name)+".txt"
-        psnr, ssim, l1, mae, lpips = rec.calculate_from_disk(self.opt.pred_results_path, self.opt.gt_results_path, save_path=self.opt.results_path)
+        psnr, ssim, l1, mae, lpips, fid = rec.calculate_from_disk(self.opt.pred_results_path, self.opt.gt_results_path, save_path=self.opt.results_path)
         f = open(metrics_writer, "a")
-        f.write("PSNR,{},SSIM,{},L1,{},MAE,{},LPIPS,{},Epoch,{}" .format(psnr, ssim, l1, mae, lpips, str(epoch))+"\n")
+        f.write("PSNR,{},SSIM,{},L1,{},MAE,{},LPIPS,{},FID,{},Epoch,{}" .format(psnr, ssim, l1, mae, lpips, fid, str(epoch))+"\n")
         f.close()
-        return psnr, ssim, mae, lpips
+        return psnr, ssim, mae, lpips, fid
 
 
     def inference(self, epoch):
-        _, out , self.structure_model_output, self.structure_model_output_soft = self.netG(self.images, self.inverse_mask, self.masked_input,  self.device, self.opt.use_sean)
+        _, out , self.structure_model_output, self.structure_model_output_soft = self.netG(self.images, self.inverse_mask, self.masked_input,  self.device, self.opt.use_sean, self.gt_label_one_hot)
     
-        ret =  out * self.inverse_mask + self.images * (self.mask)
+        ret =  out * self.inverse_mask + self.gt_empty * (self.mask)
         ret_masked = ret * self.inverse_mask
         ret = ret.squeeze_(0).permute(1,2,0).cpu().detach().numpy() 
         ret_masked = ret_masked.squeeze_(0).permute(1,2,0).cpu().detach().numpy() 
@@ -213,7 +217,7 @@ class PanoDR(BaseModel):
         pred_path = self.opt.pred_results_path+f_name
         cv2.imwrite(pred_path, (cv2.cvtColor(ret, cv2.COLOR_RGB2BGR))*255)
         gt_path = self.opt.gt_results_path+f_name
-        gt_img = self.gt_empty * self.inverse_mask + self.images * self.mask
+        gt_img = self.gt_empty
         gt_img = gt_img.squeeze_(0).permute(1,2,0).cpu().detach().numpy() 
         cv2.imwrite(gt_path, (cv2.cvtColor(gt_img, cv2.COLOR_RGB2BGR))*255)
 
