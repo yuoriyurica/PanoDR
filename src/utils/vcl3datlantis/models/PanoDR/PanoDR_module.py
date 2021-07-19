@@ -33,9 +33,9 @@ class PanoDR(BaseModel):
             for param in self.netG.structure_model.parameters():
                 param.requires_grad = False
 
-        print("Freezing Generator network's weights\n")
-        for param in self.netG.parameters():
-            param.requires_grad = False
+        # print("Freezing Generator network's weights\n")
+        # for param in self.netG.parameters():
+        #     param.requires_grad = False
 
         norm_layer = get_norm_layer()
 
@@ -149,7 +149,7 @@ class PanoDR(BaseModel):
 
         self.optimizer_G.zero_grad()
         self.forward_G()
-        # self.backward_G()
+        self.backward_G()
         self.optimizer_G.step()
 
         for p in self.netD.parameters():
