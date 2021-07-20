@@ -84,24 +84,18 @@ class FID():
 
 
     def compute_statistics_of_path(self, path, verbose):
-        npz_file = os.path.join(path, 'statistics.npz')
-        if os.path.exists(npz_file):
-            f = np.load(npz_file)
-            m, s = f['mu'][:], f['sigma'][:]
-            f.close()
-        else:
-            path = pathlib.Path(path)
-            files = list(path.glob('*.jpg')) + list(path.glob('*.png'))
-            imgs = np.array([imageio.imread(str(fn)).astype(np.float32) for fn in files])
+        path = pathlib.Path(path)
+        files = list(path.glob('*.jpg')) + list(path.glob('*.png'))
+        imgs = np.array([imageio.imread(str(fn)).astype(np.float32) for fn in files])
 
-            # Bring images to shape (B, 3, H, W)
-            imgs = imgs.transpose((0, 3, 1, 2))
+        # Bring images to shape (B, 3, H, W)
+        imgs = imgs.transpose((0, 3, 1, 2))
 
-            # Rescale images to be between 0 and 1
-            imgs /= 255
+        # Rescale images to be between 0 and 1
+        imgs /= 255
 
-            m, s = self.calculate_activation_statistics(imgs, verbose)
-            np.savez(npz_file, mu=m, sigma=s)
+        m, s = self.calculate_activation_statistics(imgs, verbose)
+        np.savez(npz_file, mu=m, sigma=s)
 
         return m, s    
 

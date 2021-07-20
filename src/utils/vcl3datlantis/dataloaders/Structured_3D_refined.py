@@ -255,7 +255,7 @@ class DRS3D(Dataset):
                     kernel = np.ones((3,3), np.uint8)
                     mask = cv2.dilate(mask, kernel, iterations = 1, borderValue = 255)
 
-        mask = self._produce_random_rect_mask()    
+        # mask = self._produce_random_rect_mask()    
 
         cwf_t = torch.from_numpy(cwf).float()
         cwf_one_hot = one_hot(cwf_t.unsqueeze(0), 3)
