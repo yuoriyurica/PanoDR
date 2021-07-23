@@ -140,7 +140,7 @@ class PanoDR(BaseModel):
         self.D_loss.backward(retain_graph=True)
 
     def optimize_parameters(self):
-        _, self.out, self.structure_model_output, self.structure_model_output_soft  = self.netG(self.images, self.inverse_mask, self.masked_input, self.device, self.opt.use_sean, self.gt_label_one_hot)
+        _, self.out, self.structure_model_output, self.structure_model_output_soft  = self.netG(self.masked_input, self.inverse_mask, self.masked_input, self.device, self.opt.use_sean, self.gt_label_one_hot)
         self.mask_patch_pred = self.out * self.inverse_mask
         self.comp = self.out * self.inverse_mask + (self.gt_empty * self.mask)
 
@@ -201,7 +201,7 @@ class PanoDR(BaseModel):
 
 
     def inference(self, epoch):
-        _, out , self.structure_model_output, self.structure_model_output_soft = self.netG(self.images, self.inverse_mask, self.masked_input,  self.device, self.opt.use_sean, self.gt_label_one_hot)
+        _, out , self.structure_model_output, self.structure_model_output_soft = self.netG(self.masked_input, self.inverse_mask, self.masked_input,  self.device, self.opt.use_sean, self.gt_label_one_hot)
     
         ret =  out * self.inverse_mask + self.gt_empty * (self.mask)
         ret_masked = ret * self.inverse_mask
