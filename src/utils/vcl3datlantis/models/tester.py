@@ -39,9 +39,10 @@ def testing(args, device, dataloader=None):
         epoch = None
 
         for (i, data) in enumerate(dataloader, 1):
+            print(i)
             if i>limit:
                 break
-            inPaintModel.initData(data, epoch, iteration)
-            inPaintModel.inference(epoch)
-        psnr, ssim, mae, lpips, fid = inPaintModel.evaluate(rec, str(epoch))
-        print("PSNR: {}, SSIM: {}, MAE: {}, LPIPS: {}, FID:{} \n".format(psnr,ssim,mae,lpips, fid))
+        #     inPaintModel.initData(data, epoch, iteration)
+        #     inPaintModel.inference(epoch)
+        # psnr, ssim, mae, lpips, fid = inPaintModel.evaluate(rec, str(epoch))
+        # print("PSNR: {}, SSIM: {}, MAE: {}, LPIPS: {}, FID:{} \n".format(psnr,ssim,mae,lpips, fid))
