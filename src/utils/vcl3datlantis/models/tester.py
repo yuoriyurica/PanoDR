@@ -17,7 +17,7 @@ def testing(args, device, dataloader=None):
 
     if args.inference == True:
         img_path = glob.glob(args.eval_path+"/FULL-GT-6/*")
-        msk_path = glob.glob(args.eval_path+"/INV-MASK-6/*")
+        msk_path = glob.glob(args.eval_path+"/MASK-6/*")
         for i in range(len(img_path)):
             img = cv2.imread(img_path[i], cv2.IMREAD_UNCHANGED)
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)/255.0
