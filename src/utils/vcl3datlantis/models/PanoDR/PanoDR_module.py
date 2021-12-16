@@ -261,6 +261,7 @@ class PanoDR(BaseModel):
         # layout_path = pred_path.replace(".png", "_layout.png")
         # cv2.imwrite(layout_path, z*255)
 
+        f_name = os.path.basename(f_name)
         pred_path = self.opt.pred_results_path+f_name
         cv2.imwrite(pred_path, (cv2.cvtColor(ret, cv2.COLOR_RGB2BGR))*255)
         gt_path = self.opt.gt_results_path+f_name
