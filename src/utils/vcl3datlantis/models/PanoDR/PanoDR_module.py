@@ -222,7 +222,7 @@ class PanoDR(BaseModel):
         cv2.imwrite(gt_path, (cv2.cvtColor(gt_img, cv2.COLOR_RGB2BGR))*255)
         mask = self.mask
         mask = mask.squeeze_(0).squeeze(0).cpu().detach().numpy() 
-        cv2.imwrite(gt_path.replace('gt', 'mask'), mask*255)
+        cv2.imwrite(gt_path.replace('gt', 'mask'), (1-mask)*255)
 
     def inference_file(self, images, mask, f_name):
 
