@@ -39,7 +39,6 @@ def testing(args, device, dataloader=None):
         epoch = None
 
         for (i, data) in enumerate(dataloader, 1):
-            print(i)
             if i>limit:
                 break
         #     inPaintModel.initData(data, epoch, iteration)

@@ -81,6 +81,7 @@ class DRS3D(Dataset):
         self.augmented = None
         self.transformation = A.RandomBrightnessContrast(p=0.5)
         self.album = album
+        self.debug = 0
         
     
     def _read_data(self, path : str, type : str):
@@ -310,6 +311,9 @@ class DRS3D(Dataset):
 
     def __getitem__(self, i):
         item = self.fetch(i)
+        if not item is None:
+            self.debug += 1
+            print(self.debug)
         while item is None:
             #self._paths.remove(self._paths[i])
             new_i = self.rng.randint(0, self.__len__() - 1)
