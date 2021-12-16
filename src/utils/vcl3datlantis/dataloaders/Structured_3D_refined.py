@@ -57,6 +57,7 @@ class DRS3D(Dataset):
             self._paths = glob.glob(f"{root_path}\\*\\*\\*\\*")
         elif isinstance(root_path, list):
             self._paths = root_path
+        print(len(self._paths))
 
         self._width, self._height = width, height
         self._S3D_WIDTH, self._S3D_HEIGHT = 1024, 512
