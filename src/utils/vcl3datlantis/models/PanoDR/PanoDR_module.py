@@ -244,20 +244,27 @@ class PanoDR(BaseModel):
         gt_img_masked = self.gt_empty * self.inverse_mask 
         gt_img_masked = gt_img_masked.squeeze_(0).permute(1,2,0).cpu().detach().numpy() 
 
-        pred_path = result_path + "diminished_" + os.path.basename(f_name)
-        raw_pred_path = result_path + "raw_pred_" + os.path.basename(f_name)
-        layout_path = result_path + "layout_" + os.path.basename(f_name)
+        # pred_path = result_path + "diminished_" + os.path.basename(f_name)
+        # raw_pred_path = result_path + "raw_pred_" + os.path.basename(f_name)
+        # layout_path = result_path + "layout_" + os.path.basename(f_name)
         
-        masked_input_np = masked_input.squeeze_(0).permute(1,2,0).cpu().detach().numpy()
-        cv2.imwrite(pred_path, (cv2.cvtColor(ret, cv2.COLOR_RGB2BGR))*255)
-        cv2.imwrite(result_path+"masked.png", (cv2.cvtColor(masked_input_np, cv2.COLOR_RGB2BGR))*255)
-        cv2.imwrite(raw_pred_path, (cv2.cvtColor(raw_ret, cv2.COLOR_RGB2BGR))*255)
+        # masked_input_np = masked_input.squeeze_(0).permute(1,2,0).cpu().detach().numpy()
+        # cv2.imwrite(pred_path, (cv2.cvtColor(ret, cv2.COLOR_RGB2BGR))*255)
+        # cv2.imwrite(result_path+"masked.png", (cv2.cvtColor(masked_input_np, cv2.COLOR_RGB2BGR))*255)
+        # cv2.imwrite(raw_pred_path, (cv2.cvtColor(raw_ret, cv2.COLOR_RGB2BGR))*255)
 
-        _layout = self.structure_model_output_soft.squeeze_(0).permute(1,2,0).cpu().detach().numpy() 
-        a=np.argmax(_layout, axis=2)
-        z=np.zeros((256,512,3))
-        z[a==0] = (255,0,0);z[a==1] = (255,255,255);z[a==2] = (0,0,255)
-        z=z.astype(np.float32)
-        layout_path = pred_path.replace(".png", "_layout.png")
-        cv2.imwrite(layout_path, z*255)
+        # _layout = self.structure_model_output_soft.squeeze_(0).permute(1,2,0).cpu().detach().numpy() 
+        # a=np.argmax(_layout, axis=2)
+        # z=np.zeros((256,512,3))
+        # z[a==0] = (255,0,0);z[a==1] = (255,255,255);z[a==2] = (0,0,255)
+        # z=z.astype(np.float32)
+        # layout_path = pred_path.replace(".png", "_layout.png")
+        # cv2.imwrite(layout_path, z*255)
+
+        pred_path = self.opt.pred_results_path+f_name
+        cv2.imwrite(pred_path, (cv2.cvtColor(ret, cv2.COLOR_RGB2BGR))*255)
+        gt_path = self.opt.gt_results_path+f_name
+        gt_img = self.gt_empty
+        gt_img = gt_img.squeeze_(0).permute(1,2,0).cpu().detach().numpy() 
+        cv2.imwrite(gt_path, (cv2.cvtColor(gt_img, cv2.COLOR_RGB2BGR))*255)
         
