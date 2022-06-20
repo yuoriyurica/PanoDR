@@ -34,7 +34,6 @@ def testing(args, device, dataloader=None):
     else:
         rec = Reconstruction_Metrics(device)
         total_batches = len(iter(dataloader))
-        print(total_batches)
         limit = total_batches
         iteration = None
         epoch = None
