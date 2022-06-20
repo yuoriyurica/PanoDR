@@ -43,5 +43,5 @@ def testing(args, device, dataloader=None):
                 break
             inPaintModel.initData(data, epoch, iteration)
             inPaintModel.inference(epoch)
-        psnr, ssim, mae, lpips, fid = inPaintModel.evaluate(rec, str(epoch))
-        print("PSNR: {}, SSIM: {}, MAE: {}, LPIPS: {}, FID:{} \n".format(psnr,ssim,mae,lpips, fid))
+        # psnr, ssim, mae, lpips, fid = inPaintModel.evaluate(rec, str(epoch))
+        # print("PSNR: {}, SSIM: {}, MAE: {}, LPIPS: {}, FID:{} \n".format(psnr,ssim,mae,lpips, fid))
