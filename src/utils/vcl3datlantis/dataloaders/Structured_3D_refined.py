@@ -253,7 +253,7 @@ class DRS3D(Dataset):
             else:
                 if self._dilate_convex_mask:
                     kernel = np.ones((3,3), np.uint8)
-                    mask = cv2.dilate(mask, kernel, iterations = 1, borderValue = 255)
+                    mask = cv2.dilate(mask, kernel, iterations = 1)
 
         # mask = self._produce_random_rect_mask()    
 
