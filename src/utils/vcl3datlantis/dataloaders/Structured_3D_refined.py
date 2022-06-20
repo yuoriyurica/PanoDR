@@ -240,8 +240,6 @@ class DRS3D(Dataset):
 
         if len(candidate_objects_for_removal) == 0:
             if self._object_mask_only:
-                with open('log_case1.txt', 'a+') as out:
-                    out.write(path+'\n')
                 return None
             else:
                 mask = self._produce_random_mask()
@@ -249,8 +247,6 @@ class DRS3D(Dataset):
             mask = self._compute_mask(full_semantic, list(candidate_objects_for_removal))
             if mask is None:
                 if self._object_mask_only:
-                    with open('log_case2.txt', 'a+') as out:
-                        out.write(path+'\n')
                     return None
                 else:
                     mask = self._produce_random_mask()
