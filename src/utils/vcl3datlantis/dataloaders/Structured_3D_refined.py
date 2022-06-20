@@ -98,6 +98,7 @@ class DRS3D(Dataset):
             full_panorama = self.augmented['image0']
 
         full_semantic_map = np.array(Image.open(os.path.join(path,"full", "semantic.png")), dtype=np.int32)
+        print(full_semantic_map)
 
         ss_path = os.path.join(path,"empty", "structure_semantics.png").replace('Structured3D', 'structure_semantics')
         cwf = cv2.imread(ss_path, 0)
