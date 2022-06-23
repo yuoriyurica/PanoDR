@@ -317,10 +317,10 @@ class DRS3D(Dataset):
 
     def __getitem__(self, i):
         item = self.fetch(i)
-        while item is None:
-            #self._paths.remove(self._paths[i])
-            new_i = self.rng.randint(0, self.__len__() - 1)
-            item = self.fetch(new_i)
+        # while item is None:
+        #     #self._paths.remove(self._paths[i])
+        #     new_i = self.rng.randint(0, self.__len__() - 1)
+        #     item = self.fetch(new_i)
         return item
 
 
