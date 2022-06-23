@@ -260,6 +260,7 @@ class DRS3D(Dataset):
                 gt_path = 'out10/gt/'+f_name
                 cv2.imwrite(gt_path, (cv2.cvtColor(empty_rgb, cv2.COLOR_RGB2BGR)))
                 cv2.imwrite(gt_path.replace('gt', 'mask'), mask)
+                return None
 
         # mask = self._produce_random_rect_mask()    
 
