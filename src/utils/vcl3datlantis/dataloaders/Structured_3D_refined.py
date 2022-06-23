@@ -244,16 +244,22 @@ class DRS3D(Dataset):
             else:
                 mask = self._produce_random_mask()
         else:
-            mask = self._compute_mask(full_semantic, list(candidate_objects_for_removal))
-            if mask is None:
-                if self._object_mask_only:
-                    return None
+            for id in list(candidate_objects_for_removal):
+                mask = self._compute_mask(full_semantic, [id])
+                if mask is None:
+                    if self._object_mask_only:
+                        continue
+                    else:
+                        mask = self._produce_random_mask()
                 else:
-                    mask = self._produce_random_mask()
-            else:
-                if self._dilate_convex_mask:
-                    kernel = np.ones((3,3), np.uint8)
-                    mask = cv2.dilate(mask, kernel, iterations = 1)
+                    if self._dilate_convex_mask:
+                        kernel = np.ones((3,3), np.uint8)
+                        mask = cv2.dilate(mask, kernel, iterations = 1)
+                
+                f_name = "_".join(path.split("/"))+f'_{id}'+".png" 
+                gt_path = 'out10/gt/'+f_name
+                cv2.imwrite(gt_path, (cv2.cvtColor(empty_rgb, cv2.COLOR_RGB2BGR)))
+                cv2.imwrite(gt_path.replace('gt', 'mask'), mask)
 
         # mask = self._produce_random_rect_mask()    
 
