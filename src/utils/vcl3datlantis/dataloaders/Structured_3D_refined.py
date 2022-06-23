@@ -321,7 +321,7 @@ class DRS3D(Dataset):
         #     #self._paths.remove(self._paths[i])
         #     new_i = self.rng.randint(0, self.__len__() - 1)
         #     item = self.fetch(new_i)
-        return item
+        return torch.zeros(1)
 
 
     def __len__(self):
