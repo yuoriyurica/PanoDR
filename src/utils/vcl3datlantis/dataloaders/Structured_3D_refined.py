@@ -150,8 +150,8 @@ class DRS3D(Dataset):
     
     def _select_candidates(self, objects_in_empty : Set[int],
                                  objects_in_full : Set[int]) -> Tuple[int]:
-        # return (objects_in_full - objects_in_empty).intersection(self._classes4masking)
-        return (objects_in_full).intersection(self._classes4masking)
+        return (objects_in_full - objects_in_empty).intersection(self._classes4masking)
+        # return (objects_in_full).intersection(self._classes4masking)
 
     def _produce_random_mask(self) -> np.ndarray:
         min_size = min(self._width, self._height)
@@ -257,7 +257,7 @@ class DRS3D(Dataset):
                         mask = cv2.dilate(mask, kernel, iterations = 1)
                 
                 f_name = "_".join(path.split("/"))+f'_{id}'+".png" 
-                gt_path = 'out10/gt/'+f_name
+                gt_path = 'out11/gt/'+f_name
                 cv2.imwrite(gt_path, (cv2.cvtColor(empty_rgb, cv2.COLOR_RGB2BGR)))
                 cv2.imwrite(gt_path.replace('gt', 'mask'), mask)
             return None
