@@ -68,7 +68,6 @@ class DRS3D(Dataset):
             self._room_lightings = ["rawlight", "coldlight", "warmlight"]
         self._min_mask_area, self._max_mask_area = min_mask_area, max_mask_area
         self._classes4masking = {3, 4, 5, 6, 7, 10, 11, 12, 14, 15, 17, 19, 24, 25, 29, 30, 32, 33, 34, 36} #40
-        self._classes4masking = {3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40}  # 40
         self._roll = roll
         self._layout_extras = layout_extras
         self._random_mask_side_size_percentage = 0.3
@@ -151,8 +150,8 @@ class DRS3D(Dataset):
     
     def _select_candidates(self, objects_in_empty : Set[int],
                                  objects_in_full : Set[int]) -> Tuple[int]:
-        # return (objects_in_full - objects_in_empty).intersection(self._classes4masking)
-        return (objects_in_full).intersection(self._classes4masking)
+        return (objects_in_full - objects_in_empty).intersection(self._classes4masking)
+        # return (objects_in_full).intersection(self._classes4masking)
 
     def _produce_random_mask(self) -> np.ndarray:
         min_size = min(self._width, self._height)
