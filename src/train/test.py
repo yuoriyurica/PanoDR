@@ -117,8 +117,8 @@ if __name__ == "__main__":
         test_dataset = None
     else:
         
-        _, _, test = split(args.test_path)
-        test_dataset =DataLoader(DRS3D(test, args.width, args.height, 0.8, 0.01, roll = False,  layout_extras = False), 
+        train, val, test = split(args.test_path)
+        test_dataset =DataLoader(DRS3D(train, args.width, args.height, 0.8, 0.01, roll = False,  layout_extras = False), 
                 args.batch_size, shuffle=False, num_workers=0)
 
     testing(args, device, test_dataset)

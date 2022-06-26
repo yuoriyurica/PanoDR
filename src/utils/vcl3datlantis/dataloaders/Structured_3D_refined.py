@@ -257,7 +257,7 @@ class DRS3D(Dataset):
                         mask = cv2.dilate(mask, kernel, iterations = 1)
                 
                 f_name = "_".join(path.split("/"))+f'_{id}'+".png" 
-                gt_path = 'out11/gt/'+f_name
+                gt_path = 'out12/gt/'+f_name
                 cv2.imwrite(gt_path, (cv2.cvtColor(empty_rgb, cv2.COLOR_RGB2BGR)))
                 cv2.imwrite(gt_path.replace('gt', 'mask'), mask)
             return None
